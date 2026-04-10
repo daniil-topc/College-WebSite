@@ -1,0 +1,878 @@
+/**
+  Нормализация блочной модели
+ */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+/**
+  Убираем внутренние отступы слева тегам списков,
+  у которых есть атрибут class
+ */
+:where(ul, ol):where([class]) {
+  padding-left: 0;
+}
+
+/**
+  Убираем внешние отступы body и двум другим тегам,
+  у которых есть атрибут class
+ */
+body,
+:where(blockquote, figure, fieldset):where([class]) {
+  margin: 0;
+}
+
+/**
+  Убираем внешние отступы вертикали нужным тегам,
+  у которых есть атрибут class
+ */
+:where(h1, h2, h3, h4, h5, h6, p, ul, ol, dl):where([class]) {
+  margin-block: 0;
+}
+
+:where(dd[class]) {
+  margin-left: 0;
+}
+
+:where(fieldset[class]) {
+  padding: 0;
+  border: none;
+}
+
+/**
+  Убираем стандартный маркер маркированному списку,
+  у которого есть атрибут class
+ */
+:where(ul[class]) {
+  list-style: none;
+}
+
+:where(address[class]) {
+  font-style: normal;
+}
+
+/**
+  Обнуляем вертикальные внешние отступы параграфа,
+  объявляем локальную переменную для внешнего отступа вниз,
+  чтобы избежать взаимодействие с более сложным селектором
+ */
+p {
+  --paragraphMarginBottom: 24px;
+
+  margin-block: 0;
+}
+
+/**
+  Внешний отступ вниз для параграфа без атрибута class,
+  который расположен не последним среди своих соседних элементов
+ */
+p:where(:not([class]):not(:last-child)) {
+  margin-bottom: var(--paragraphMarginBottom);
+}
+
+/**
+  Упрощаем работу с изображениями и видео
+ */
+img,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/**
+  Наследуем свойства шрифт для полей ввода
+ */
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+html {
+  /**
+    Пригодится в большинстве ситуаций
+    (когда, например, нужно будет "прижать" футер к низу сайта)
+   */
+  height: 100%;
+  /**
+    Убираем скачок интерфейса по горизонтали
+    при появлении / исчезновении скроллбара
+   */
+  scrollbar-gutter: stable;
+  /**
+    Плавный скролл
+   */
+  scroll-behavior: smooth;
+}
+
+body {
+  /**
+    Пригодится в большинстве ситуаций
+    (когда, например, нужно будет "прижать" футер к низу сайта)
+   */
+  min-height: 100%;
+  /**
+    Унифицированный интерлиньяж
+   */
+  line-height: 1.5;
+}
+
+/**
+  Нормализация высоты элемента ссылки при его инспектировании в DevTools
+ */
+a:where([class]) {
+  display: inline-flex;
+}
+
+/**
+  Курсор-рука при наведении на элемент
+ */
+button,
+label {
+  cursor: pointer;
+}
+
+/**
+  Убирает серую подсветку при тапе на мобильных устройствах (iOS/Android)
+ */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/**
+  Приводим к единому цвету svg-элементы
+  (за исключением тех, у которых уже указан
+  атрибут fill со значением 'none' или начинается с 'url')
+ */
+:where([fill]:not([fill="none"], [fill^="url"])) {
+  fill: currentColor;
+}
+
+/**
+  Приводим к единому цвету svg-элементы
+  (за исключением тех, у которых уже указан
+  атрибут stroke со значением 'none')
+ */
+:where([stroke]:not([stroke="none"], [stroke^="url"])) {
+  stroke: currentColor;
+}
+
+/**
+  Чиним баг задержки смены цвета при взаимодействии с svg-элементами
+ */
+svg * {
+  transition-property: fill, stroke;
+}
+
+/**
+  Приведение рамок таблиц в классический 'collapse' вид
+ */
+:where(table) {
+  border-collapse: collapse;
+  border-color: currentColor;
+}
+
+/**
+  Удаляем все анимации и переходы для людей,
+  которые предпочитают их не использовать
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes buttonGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-animated {
+  background: linear-gradient(270deg, #2563eb, #64748b, #0284c7, #64748b, #2563eb);
+  background-size: 600% 600%;
+  animation: buttonGradient 8s ease infinite;
+}
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+
+  --border: #1f2937;
+  --border-radius: 6px;
+
+  --font-main: "Roboto", sans-serif;
+  --font-code: "JetBrains Mono", monospace;
+  --transition: 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-primary);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--accent);
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+a {
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-block: 32px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 20px;
+}
+
+.hamburger-menu {
+  display: none;
+}
+
+/* скрываем чекбокс */
+#menu__toggle {
+  position: fixed;
+  opacity: 0;
+}
+/* стилизуем кнопку */
+.menu__btn {
+  display: flex; /* используем flex для центрирования содержимого */
+  align-items: center; /* центрируем содержимое кнопки */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  left: auto;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 1;
+}
+/* добавляем "гамбургер" */
+.menu__btn > span,
+.menu__btn > span::before,
+.menu__btn > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+}
+.menu__btn > span::before {
+  content: "";
+  top: -8px;
+}
+.menu__btn > span::after {
+  content: "";
+  top: 8px;
+}
+
+/* контейнер меню */
+.menu__box {
+  display: block;
+  position: fixed;
+  visibility: hidden;
+  top: 0;
+  right: -100%;
+  left: auto;
+  width: 300px;
+  height: 100%;
+  margin: 0;
+  padding: 80px 0;
+  list-style: none;
+  text-align: center;
+  background-color: #eceff1;
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, 0.2);
+}
+/* элементы меню */
+.menu__item {
+  display: block;
+  padding: 12px 24px;
+  color: #333;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.menu__item:hover {
+  background-color: #cfd8dc;
+}
+
+#menu__toggle:checked ~ .menu__btn > span {
+  transform: rotate(45deg);
+}
+#menu__toggle:checked ~ .menu__btn > span::before {
+  top: 0;
+  transform: rotate(0);
+}
+#menu__toggle:checked ~ .menu__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+#menu__toggle:checked ~ .menu__box {
+  visibility: visible;
+  right: 0;
+}
+
+#menu__toggle:checked ~ .menu__btn > span,
+#menu__toggle:checked ~ .menu__btn > span::before,
+#menu__toggle:checked ~ .menu__btn > span::after {
+  background-color: #000;
+}
+
+.menu__btn > span,
+.menu__btn > span::before,
+.menu__btn > span::after {
+  transition-duration: 0.25s;
+}
+.menu__box {
+  transition-duration: 0.25s;
+}
+.menu__item {
+  transition-duration: 0.25s;
+}
+
+.header__logo-icon {
+  color: white;
+}
+
+.header__nav-list {
+  display: flex;
+  gap: 24px;
+}
+
+.header__nav-link {
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.about {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.about__content {
+  display: flex;
+  align-items: center;
+  column-gap: 50px;
+}
+
+.about__image {
+  border-radius: var(--border-radius);
+}
+
+.about__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.about__text span {
+  display: inline-block;
+  color: var(--text-primary);
+  font-size: clamp(18px, 3vw, 32px);
+  padding-block: 20px;
+}
+
+.about__text {
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: clamp(16px, 2.5vw, 19px);
+}
+
+.about__link {
+  font-family: var(--font-code);
+  color: var(--text-primary);
+}
+
+.about__button-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--accent);
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.projects {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.projects__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.projects-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.projects-card__image {
+  border-radius: var(--border-radius);
+  margin-bottom: 16px;
+}
+
+.projects-card__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(18px, 3vw, 32px);
+  margin-bottom: 8px;
+}
+
+.projects-card__desc {
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: clamp(14px, 2vw, 18px);
+  padding-bottom: 20px;
+}
+
+.projects-link {
+  display: block;
+  font-family: var(--font-code);
+  color: var(--text-primary);
+  background-color: var(--accent);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  margin-top: auto;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.abilities {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.abilities__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.abilities__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.abilities__item {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.abilities__item span {
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: clamp(16px, 3vw, 24px);
+}
+
+.quotes {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.quotes__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.quotes__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.quotes__card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  transition: var(--transition);
+}
+
+.quotes__text {
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.quotes__author {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(16px, 3vw, 24px);
+  text-align: right;
+  margin-top: auto;
+}
+
+.quotes__image {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.quotes__image-content {
+  border-radius: var(--border-radius);
+}
+
+.game {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.game__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.game__cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.game__card {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.game__card-image {
+  border-radius: var(--border-radius);
+  height: auto;
+}
+
+.game__card-title {
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: clamp(16px, 3vw, 20px);
+  text-align: center;
+}
+
+.sport {
+  margin-top: 100px;
+  padding-inline: 30px;
+}
+
+.sport__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 60px);
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.sport__content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.sport__image-content {
+  border-radius: var(--border-radius);
+  justify-self: center;
+}
+
+.sport__desc-title {
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  font-size: clamp(18px, 3vw, 32px);
+  justify-self: start;
+  align-self: start;
+  margin-bottom: 30px;
+}
+
+.sport__desc {
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: clamp(16px, 2.5vw, 19px);
+  max-width: 400px;
+}
+
+.goals {
+  padding: 20px;
+  margin-top: 100px;
+}
+
+.goals__title {
+  color: var(--text-primary);
+  font-family: var(--font-code);
+  font-size: clamp(24px, 4vw, 64px);
+  font-weight: 700;
+}
+
+.goals__list-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 20px;
+  row-gap: 15px;
+}
+
+.goals__item {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  background-color: var(--bg-tertiary);
+  padding: 20px 30px;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.footer {
+  margin-top: 100px;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.footer__text {
+  font-family: var(--font-main);
+  font-size: clamp(14px, 2vw, 18px);
+}
+
+.footer__text-link {
+  color: var(--text-secondary);
+  text-decoration: underline;
+  margin-top: 10px;
+}
+
+.footer__soc1al {
+  display: flex;
+  justify-content: center;
+  margin-block: 30px;
+  column-gap: 20px;
+}
+
+.footer__soc1al-link {
+  color: var(--text-secondary);
+  font-size: clamp(18px, 3vw, 32px);
+}
+
+@media (max-width: 1024px) {
+  .about__content {
+    flex-direction: column;
+    row-gap: 25px;
+  }
+
+  .projects__grid {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 40px;
+  }
+
+  .abilities__list {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 30px;
+  }
+
+  .quotes__grid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__nav-list {
+    gap: 30px;
+  }
+
+  .about__button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .abilities__list {
+    grid-template-columns: 1fr;
+  }
+
+  .quotes__grid {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+
+  .sport__content-grid {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+
+  .sport__desc {
+    justify-self: center;
+  }
+
+  .goals__list-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__soc1al {
+    column-gap: 30px;
+  }
+}
+
+@media (max-width: 700px) {
+  .hamburger-menu {
+    display: block;
+  }
+
+  .header__nav-list {
+    display: none;
+  }
+}
+
+@media (hover: hover) {
+
+  .header__nav-link:hover {
+    color: var(--text-muted);
+  }
+
+  .about__button-link:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .projects-link:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .projects-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .abilities__item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .quotes__card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn:hover {
+    background-color: var(--accent-hover);
+  }
+
+  .goals__item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .footer__soc1al-link:hover {
+    transform: translateY(-5px);
+  }
+}
+
+@media (hover: none) {
+
+  .header__nav-link:active {
+    color: var(--text-muted);
+  }
+
+  .about__button-link:active {
+    background-color: var(--accent-hover);
+  }
+
+  .projects-link:active {
+    background-color: var(--accent-hover);
+  }
+
+  .abilities__item:active {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .quotes__card:active {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .btn:active {
+    background-color: var(--accent-hover);
+  }
+
+  .goals__item:active {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .footer__soc1al-link:hover {
+    transform: translateY(-5px);
+  }
+}
