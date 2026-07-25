@@ -601,7 +601,7 @@ a {
   border-radius: var(--border-radius);
 }
 
-.game {
+/* .game {
   margin-top: 100px;
   padding-inline: 30px;
 }
@@ -636,7 +636,7 @@ a {
   font-family: var(--font-main);
   font-size: clamp(16px, 3vw, 20px);
   text-align: center;
-}
+} */
 
 .sport {
   margin-top: 100px;
