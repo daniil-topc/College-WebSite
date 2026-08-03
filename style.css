@@ -436,6 +436,15 @@ a {
   font-size: clamp(16px, 2.5vw, 19px);
 }
 
+.about__text > p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.about__text > p + p {
+  margin-top: 20px;
+}
+
 .about__link {
   font-family: var(--font-code);
   color: var(--text-primary);
